@@ -28,7 +28,7 @@ export default function Expenses(props) {
 
   useEffect(() => {
     getExpenses(props.expenses, props.carId)
-  }, [])
+  }, [getExpenses])
 
   function deleteExpense(key) {
     axios.get(DELETE_EXPENSE, { params: { id: key } })

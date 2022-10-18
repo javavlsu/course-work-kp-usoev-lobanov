@@ -2,6 +2,7 @@ package autoexpenses.controllers;
 
 import autoexpenses.dto.ExpenseRequestDto;
 import autoexpenses.dto.ExpenseResponseDto;
+import autoexpenses.dto.StatisticExpenseDto;
 import autoexpenses.entity.Expense;
 import autoexpenses.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,14 @@ public class ExpenseController {
         expenseService.deleteExpense(id);
 
         return ResponseEntity.ok("expense deleted");
+    }
+
+    @GetMapping("getStatistic")
+    public ResponseEntity getStatistic(@RequestParam final Long id) {
+        StatisticExpenseDto expense = expenseService.getStatistic(id);
+
+        if(expense == null) return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+        return ResponseEntity.ok(expense);
     }
 }

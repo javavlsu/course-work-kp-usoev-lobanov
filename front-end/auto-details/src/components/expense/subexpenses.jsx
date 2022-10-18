@@ -28,7 +28,7 @@ export default function SubExpenses(props) {
 
   useEffect(() => {
     getExpenses(props.exp, props.carId)
-  }, [])
+  }, [getExpenses])
 
   return (
     <div>

@@ -25,3 +25,5 @@ export const DELETE_SUBCATEGORY = 'http://localhost:8075/api/deleteSubCategory'
 export const DELETE_EXPENSE = 'http://localhost:8075/api/deleteExpense'
 
 export const GET_SUB_EXPENSES = 'http://localhost:8075/api/getAllExpensesSubCategory'
+
+export const GET_STATISTIC = 'http://localhost:8075/api/getStatistic'

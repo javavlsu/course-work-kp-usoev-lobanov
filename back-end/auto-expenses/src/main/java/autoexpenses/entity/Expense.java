@@ -43,4 +43,10 @@ public class Expense extends ExpenseResponseDto {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "carId")
     private Car cars;
+
+    public static int compare (Expense p1, Expense p2){
+        if(p1.getAmount() > p2.getAmount())
+            return 1;
+        return -1;
+    }
 }

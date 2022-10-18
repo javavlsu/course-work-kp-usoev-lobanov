@@ -1,6 +1,7 @@
 package autoexpenses.service.impl;
 
 import autoexpenses.dto.ExpenseRequestDto;
+import autoexpenses.dto.StatisticExpenseDto;
 import autoexpenses.entity.Expense;
 import autoexpenses.repository.*;
 import autoexpenses.service.ExpenseService;
@@ -72,8 +73,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setAmount(dto.amount);
         expense.setCategory(categoryRepository.findById(dto.categoryId).orElse(null));
         expense.setCategoryId(dto.categoryId);
-        expense.setSubCategory(subCategoryRepository.findById(dto.subCategoryId).orElse(null));
-        expense.setSubCategoryId(dto.subCategoryId);
+        if(dto.subCategoryId != null) {
+            expense.setSubCategory(subCategoryRepository.findById(dto.subCategoryId).orElse(null));
+            expense.setSubCategoryId(dto.subCategoryId);
+        }
 
         expense.setCars(carRepository.findById(dto.carId).orElse(null));
         expense.setDeleted(Boolean.FALSE);
@@ -98,6 +101,27 @@ public class ExpenseServiceImpl implements ExpenseService {
         val expense = expenseRepository.findById(id).orElse(null);
         expense.setDeleted(Boolean.TRUE);
         expenseRepository.save(expense);
+    }
+
+    @Override
+    public StatisticExpenseDto getStatistic(Long id) {
+        val car = carRepository.findById(id).orElse(null);
+        StatisticExpenseDto dto = new StatisticExpenseDto();
+        List<Expense> expenses = expenseRepository.findAll()
+                .stream()
+                .filter(a -> Stream.of(Boolean.FALSE).anyMatch(b -> a.getDeleted().equals(b)))
+                .filter(c -> Stream.of(car).anyMatch(d -> c.getCars().equals(d)))
+                .collect(Collectors.toList());
+        dto.expenses = expenses.stream().map(a -> a.getAmount());
+        dto.totalCost= expenses.stream().reduce(0,
+                (x,y) -> {
+                    return x + y.getAmount().intValue();
+                },
+                (x,y) -> x+y);
+        dto.maxAmount = expenses.stream().max(Expense::compare).get().getAmount();
+        dto.minAmount = expenses.stream().min(Expense::compare).get().getAmount();
+        dto.count = expenses.stream().count();
+       return dto;
     }
 
 }

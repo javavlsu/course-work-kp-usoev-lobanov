@@ -14,6 +14,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function AddCar(props) {
     const [idUser] = localStorage.getItem('id_user');
@@ -36,6 +43,9 @@ export default function AddCar(props) {
     const [ptsNumber, setPtsNumber] = useState('');
     const [stsSeries, setStsSeries] = useState('');
     const [stsNumber, setStsNumber] = useState('');
+
+    const [open, setOpen] = React.useState(false);
+    const [error, setError] = React.useState(false);
 
     function addcar(e) {
         e.preventDefault();
@@ -71,276 +81,305 @@ export default function AddCar(props) {
             .then((response) => {
                 if (response.status === 200) {
                     console.log(response.data);
-                } else {
-                    alert('Error registration admin');
+                    setOpen(true);
                 }
+                else setError(true);
 
             });
         props.close();
     };
 
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const errorClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setError(false);
+    };
+
     return (
-        <Dialog open={props.open} onClose={props.close}>
-            <DialogTitle className='header'>Добавление автомобиля</DialogTitle>
-            <DialogContent className='car'>
-                <td className='row'>
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="brand"
-                            label="Марка"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={brand}
-                            onChange={(e) => setBrand(e.target.value)}
-                        /></tr>
+        <div>
+            <Stack spacing={2} sx={{ width: '100%' }}>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%', color: 'white !important' }}>
+                        Автомобиль добавлен
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={error} autoHideDuration={6000} onClose={errorClose} >
+                    <Alert severity="error">Ошибка добавления автомобиля!</Alert>
+                </Snackbar>
+            </Stack>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="model"
-                            label="Модель"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={model}
-                            onChange={(e) => setModel(e.target.value)}
-                        /></tr>
+            <Dialog open={props.open} onClose={props.close}>
+                <DialogTitle className='header'>Добавление автомобиля</DialogTitle>
+                <DialogContent className='car'>
+                    <td className='row'>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="brand"
+                                label="Марка"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={brand}
+                                onChange={(e) => setBrand(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="generation"
-                            label="Поколение"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={generation}
-                            onChange={(e) => setGeneration(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="model"
+                                label="Модель"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={model}
+                                onChange={(e) => setModel(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="yearOfIssue"
-                            label="Год выпуска"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={yearOfIssue}
-                            onChange={(e) => setYearOfIssue(e.target.value)}
-                        />
-                    </tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="generation"
+                                label="Поколение"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={generation}
+                                onChange={(e) => setGeneration(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="winCode"
-                            label="WIN"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={winCode}
-                            onChange={(e) => setWinCode(e.target.value)}
-                        /></tr>
-                </td>
-                <td className='row'>
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="color"
-                            label="Цвет"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={color}
-                            onChange={(e) => setColor(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="yearOfIssue"
+                                label="Год выпуска"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={yearOfIssue}
+                                onChange={(e) => setYearOfIssue(e.target.value)}
+                            />
+                        </tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="body"
-                            label="Кузов"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={body}
-                            onChange={(e) => setBody(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="winCode"
+                                label="WIN"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={winCode}
+                                onChange={(e) => setWinCode(e.target.value)}
+                            /></tr>
+                    </td>
+                    <td className='row'>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="color"
+                                label="Цвет"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={color}
+                                onChange={(e) => setColor(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="typeEngine"
-                            label="Тип двигателя"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={typeEngine}
-                            onChange={(e) => setTypeEngine(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="body"
+                                label="Кузов"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={body}
+                                onChange={(e) => setBody(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="engineCapacity"
-                            label="Объем двигателя"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={engineCpacity}
-                            onChange={(e) => setEngineCapacity(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="typeEngine"
+                                label="Тип двигателя"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={typeEngine}
+                                onChange={(e) => setTypeEngine(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="power"
-                            label="Мощность"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={power}
-                            onChange={(e) => setPower(e.target.value)}
-                        /></tr>
-                </td>
-                <td className='row'>
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="milleage"
-                            label="Пробег"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={milleage}
-                            onChange={(e) => setMilleage(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="engineCapacity"
+                                label="Объем двигателя"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={engineCpacity}
+                                onChange={(e) => setEngineCapacity(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <Box sx={{ minWidth: 120 }} className='cell-item'>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">КПП</InputLabel>
-                                <Select sx={{ minWidth: 120, }}
-                                    labelId="kpp"
-                                    id="kpp"
-                                    value={kpp}
-                                    label="КПП"
-                                    onChange={(e) => setKpp(e.target.value)}
-                                >
-                                    <MenuItem value={"Механическая"}>Механическая</MenuItem>
-                                    <MenuItem value={"Автоматическая"}>Автоматическая</MenuItem>
-                                    <MenuItem value={"Робот"}>Робот</MenuItem>
-                                    <MenuItem value={"Вариатор"}>Вариатор</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="power"
+                                label="Мощность"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={power}
+                                onChange={(e) => setPower(e.target.value)}
+                            /></tr>
+                    </td>
+                    <td className='row'>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="milleage"
+                                label="Пробег"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={milleage}
+                                onChange={(e) => setMilleage(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <Box sx={{ minWidth: 120 }} className='cell-item'>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Привод</InputLabel>
-                                <Select sx={{ minWidth: 120, }}
-                                    labelId="driveUnit"
-                                    id="driveUnit"
-                                    value={driveUnit}
-                                    label="Привод"
-                                    onChange={(e) => setDriveUnit(e.target.value)}
-                                >
-                                    <MenuItem value={"Передний"}>Передний</MenuItem>
-                                    <MenuItem value={"Задний"}>Задний</MenuItem>
-                                    <MenuItem value={"Полный"}>Полный</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </tr>
+                        <tr className='cell'>
+                            <Box sx={{ minWidth: 120 }} className='cell-item'>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">КПП</InputLabel>
+                                    <Select sx={{ minWidth: 120, }}
+                                        labelId="kpp"
+                                        id="kpp"
+                                        value={kpp}
+                                        label="КПП"
+                                        onChange={(e) => setKpp(e.target.value)}
+                                    >
+                                        <MenuItem value={"Механическая"}>Механическая</MenuItem>
+                                        <MenuItem value={"Автоматическая"}>Автоматическая</MenuItem>
+                                        <MenuItem value={"Робот"}>Робот</MenuItem>
+                                        <MenuItem value={"Вариатор"}>Вариатор</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </tr>
 
-                    <tr className='cell'>
-                        <Box sx={{ minWidth: 120 }} className='cell-item'>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Положение руля</InputLabel>
-                                <Select sx={{ minWidth: 120, }}
-                                    labelId="steeringWheelPosition"
-                                    id="steeringWheelPosition"
-                                    value={steeringWheelPosition}
-                                    label="Положение руля"
-                                    onChange={(e) => setSteeringWheelPosition(e.target.value)}
-                                >
-                                    <MenuItem value={"Правый"}>Правый</MenuItem>
-                                    <MenuItem value={"Левый"}>Левый</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </tr>
+                        <tr className='cell'>
+                            <Box sx={{ minWidth: 120 }} className='cell-item'>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Привод</InputLabel>
+                                    <Select sx={{ minWidth: 120, }}
+                                        labelId="driveUnit"
+                                        id="driveUnit"
+                                        value={driveUnit}
+                                        label="Привод"
+                                        onChange={(e) => setDriveUnit(e.target.value)}
+                                    >
+                                        <MenuItem value={"Передний"}>Передний</MenuItem>
+                                        <MenuItem value={"Задний"}>Задний</MenuItem>
+                                        <MenuItem value={"Полный"}>Полный</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="consumption"
-                            label="Расход"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={cunsumption}
-                            onChange={(e) => setCunsumption(e.target.value)}
-                        /></tr>
-                </td>
-                <td className='row'>
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="ptsSeries"
-                            label="Серия ПТС"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={ptsSeries}
-                            onChange={(e) => setPtsSeries(e.target.value)}
-                        /></tr>
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="ptsNumber"
-                            label="Номер ПТС"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={ptsNumber}
-                            onChange={(e) => setPtsNumber(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <Box sx={{ minWidth: 120 }} className='cell-item'>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Положение руля</InputLabel>
+                                    <Select sx={{ minWidth: 120, }}
+                                        labelId="steeringWheelPosition"
+                                        id="steeringWheelPosition"
+                                        value={steeringWheelPosition}
+                                        label="Положение руля"
+                                        onChange={(e) => setSteeringWheelPosition(e.target.value)}
+                                    >
+                                        <MenuItem value={"Правый"}>Правый</MenuItem>
+                                        <MenuItem value={"Левый"}>Левый</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="stsSeries"
-                            label="Серия СТС"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={stsSeries}
-                            onChange={(e) => setStsSeries(e.target.value)}
-                        /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="consumption"
+                                label="Расход"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={cunsumption}
+                                onChange={(e) => setCunsumption(e.target.value)}
+                            /></tr>
+                    </td>
+                    <td className='row'>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="ptsSeries"
+                                label="Серия ПТС"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={ptsSeries}
+                                onChange={(e) => setPtsSeries(e.target.value)}
+                            /></tr>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="ptsNumber"
+                                label="Номер ПТС"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={ptsNumber}
+                                onChange={(e) => setPtsNumber(e.target.value)}
+                            /></tr>
 
-                    <tr className='cell'>
-                        <TextField className='cell-item'
-                            margin="dense"
-                            id="stsNumber"
-                            label="Серия СТС"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={stsNumber}
-                            onChange={(e) => setStsNumber(e.target.value)}
-                        /></tr>
-                </td>
-            </DialogContent>
-            <DialogActions className='addcar'>
-                <Button className='buttoncar' onClick={() => props.close()}>Закрыть</Button>
-                <Button className='buttoncar' onClick={addcar} >Добавить</Button>
-            </DialogActions>
-        </Dialog>
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="stsSeries"
+                                label="Серия СТС"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={stsSeries}
+                                onChange={(e) => setStsSeries(e.target.value)}
+                            /></tr>
+
+                        <tr className='cell'>
+                            <TextField className='cell-item'
+                                margin="dense"
+                                id="stsNumber"
+                                label="Серия СТС"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={stsNumber}
+                                onChange={(e) => setStsNumber(e.target.value)}
+                            /></tr>
+                    </td>
+                </DialogContent>
+                <DialogActions className='addcar'>
+                    <Button className='buttoncar' onClick={() => props.close()}>Закрыть</Button>
+                    <Button className='buttoncar' onClick={addcar} >Добавить</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
 }
