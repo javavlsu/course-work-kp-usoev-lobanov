@@ -1,0 +1,33 @@
+
+.sidebar{
+    width: 20%;
+    min-height: 100%;
+    float: left;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    padding: 10px;
+    position: fixed;
+    z-index: 1;
+}
+.profile {
+    display: flex;
+    margin: 5%;
+}
+
+.nameProfile {
+    padding: 2% !important;
+}
+
+.menu{
+    margin-top: 25%;
+}
+
+.button {
+    width: 100% !important;
+    margin: 5% 5% 5% 0 !important;
+    background-color: white !important;
+    box-shadow: 0 5px 5px -5px rgba(0,0,0,0.5), 0 0 1px rgba(0,0,0,0.5) !important; 
+}
+
+.MuiPaper-root {
+    color: rgba(25,118,210,1) !important;
+}

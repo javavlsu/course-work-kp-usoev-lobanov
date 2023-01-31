@@ -1,0 +1,38 @@
+.car-form {
+    min-width: 50%;
+}
+
+.header {
+    text-align: center;
+}
+
+.car {
+    display: flex;
+    text-align: center;
+}
+
+.row {
+    flex-direction: cell;
+    width: 100%;
+    margin: 2%;
+}
+
+.cell {
+    flex-direction: row;
+}
+
+.cell-item {
+    margin: 5%;
+    width: 100%;
+}
+
+.addcar {
+    width: 100%;
+    margin-top: 5%;
+}
+
+.buttoncar {
+    width: 100%;
+    padding: 1% !important;
+    font-size: 1rem !important;
+}

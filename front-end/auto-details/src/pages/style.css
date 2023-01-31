@@ -1,0 +1,11 @@
+.page {
+    background-color: white;
+    width: auto;
+    height: auto;
+    text-align: center;
+    margin: 15%;
+}
+
+.buttons {
+    margin-top: 3% !important;
+}
